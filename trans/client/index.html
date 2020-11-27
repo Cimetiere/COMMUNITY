@@ -1,0 +1,72 @@
+<!doctype>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>-Community-</title>
+        <!-- Load Vue followed by Vue Router -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/http-vue-loader/src/httpVueLoader.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div id="app">
+          <header>
+          </br>
+
+            <nav class="navbar navbar-dark bg-dark" id="navbar">
+              
+              <router-link  id="router" class="text-white" to='/inscription'><button type="button" class="btn btn-outline-info btn-lg" >Inscription</button></router-link>
+                          <router-link  id="router" class="text-white" to='/'><button type="button" class="btn btn-outline-light btn-lg">Accueil</button></router-link>
+                          <router-link  id="router" class="text-white" to='/'><button type="button" class="btn btn-outline-light btn-xl">Trouver des associations</button></router-link>
+                          <router-link  id="router" class="text-white" to='/monEspace'><button type="button" class="btn btn-outline-warning btn-lg">Mon espace</button></router-link>
+            </nav>
+          </header>
+          <main>
+            <router-view
+            :associations="associations"
+              :follow="follow"
+              @add-follow="addFollow"
+              @un-follow="unfollow"
+              @inscription="inscription"
+              @inscription2="inscription2"
+            ></router-view>
+          </main>
+        </div>
+        <script src="/vue-application.js"></script>
+    </body>
+</html>
+
+
+<style>
+  #router{
+
+    text-decoration:none; 
+  }
+
+  #router:hover{
+    opacity: 70% !important;
+    
+  }
+
+  #navbar{
+    padding: 30px;
+  }
+
+  .btn-xl{
+    padding: 10px 20px;
+    font-size: 23px;
+    border-radius: 5px;
+    font-weight: lighter;
+  }
+
+  .btn-lg{
+    font-weight: normal;
+  }
+
+</style>
