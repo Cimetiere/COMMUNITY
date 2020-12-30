@@ -1,7 +1,7 @@
 <template>
     <div id="divBody">
         <div id="divActualites">
-            <h1><strong>Fils d'actualites</strong></h1>
+            <h2><strong>Fils d'actualites</strong></h2>
             <div id="actualites">
                 <h3 id="titreAsso">Nom de l'association</h3><br>
                 <div id="photoAsso">photo pour illustrer</div>
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div id="assos_follow">
-            <h1><strong>Associations follow</strong></h1>
+            <h2><strong>Associations follow</strong></h2>
             <article v-for="(association, index) in follow.associations" :key="association.id">
                 <div>
                     {{ associations[(follow.associations[index].id)-1].name }}
@@ -49,24 +49,36 @@
                 </div>
             </article>
         </div>
+    
+  
+     
     </div>
 </template>
 
 <script>
+
+
+
   module.exports = {
     props: {
       associations: { type: Array, default: [] },
+       teste: {type: Object },
       follow: { type: Object }
+     
     },
     data () {
       return {
-        
       }
     },
+    
     methods: {
       unfollow(associationId) {
         this.$emit('un-follow', associationId)
-      }
+      },
+
+     
+      
+      
     }
   }
 </script>
@@ -86,9 +98,10 @@
     #divBody
     {
         display: flex;
-        width: 1300px;
+        width: 1350px;
         margin: 0 auto;
         font-family: arial;
+        margin-top: 50px;
     }
     #divActualites
     {

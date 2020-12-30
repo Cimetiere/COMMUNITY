@@ -7,7 +7,7 @@
       </br>
       </br>
       <hr>
-      <h3> 1er étape - Profil</h3>
+      <h2> 1er étape - Profil</h2>
       <hr>
       </br>
       <div class="input-group mb-3">
@@ -28,7 +28,7 @@
       </br>
       </br>
       <hr>
-      <h3> 2eme étape - Mon espace personnel</h3>
+      <h2> 2eme étape - Mon espace personnel</h2>
       <hr>
       </br>
       <div class="input-group mb-3">
@@ -46,7 +46,7 @@
       
       </div>
       <small id="passwordHelpBlock" class="form-text text-muted">
-  Votre mot de passe doit contenir au minimum 8 caractères et au minimum 2 symboles
+  Votre mot de passe doit contenir au minimum 8 caractères et un symbole * et un symbole /
 </small>
         </br>
        <div class="input-group mb-3">
@@ -63,7 +63,10 @@
         <div class="submit">
         <button class="btn btn-primary btn-lg" type="submit" v-on:click="inscription" >S'inscrire   </button>
         </div>
+  
     </form>
+
+  
 </div>
 
 </template>
@@ -78,20 +81,28 @@ module.exports = {
       name: '',
       firstname: '',
       
+
+      
     }
   },
   methods: {
-    inscription(){ //problème pour le mdp , symbole et 8 caractères obligatoires !!!!
+    inscription(){ 
         if (this.password=='' || this.password2=='' || this.name ==''|| this.firstname == ''|| this.email == ''){
             alert("Vous n'avez pas rempli tous les champs.")
         }
         else{
         if (this.password == this.password2){
-          this.$emit('inscription', this.email, this.password, this.name, this.firstname)
+          if (this.password.length > 7 && this.password.includes('*') && this.password.includes('/')){
+            
+            this.$emit('inscription', this.email, this.password, this.name, this.firstname)
+          }
+          else{
+              alert("Problèmes, vérifiez que les 2 mots de passes respectent la nomenclature demandée.")
+          }
         }
      
         else{
-          alert("Les mots de passes ne sont pas les mêmes veuillez réssayer.")
+          alert("Problèmes, vérifiez si les 2 mots de passes corresspondent.")
         }
         }
         
@@ -100,6 +111,7 @@ module.exports = {
   }
   
 }
+
 </script>
 
 <style scoped>

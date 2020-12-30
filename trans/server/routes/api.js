@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const associations = require('../data/associations.js')
+const categories = require('../data/categories.js')
 
 const bcrypt = require('bcrypt')
 const { Client } = require('pg')
@@ -8,7 +9,7 @@ const { Client } = require('pg')
 const client = new Client({
  user: 'postgres',
  host: 'localhost',
- password: 'your_password',
+ password: 'password',
  database: 'Transverse'
 })
 
@@ -21,6 +22,9 @@ class Follow {
     this.associations = []
   }
 }
+
+
+
 
 router.post('/register', async(req, res) => {
   const email = req.body.email
@@ -41,9 +45,8 @@ router.post('/register', async(req, res) => {
 
   const hash = await bcrypt.hash(password, 10)
   await client.query('INSERT INTO utilisateurs(email, password, name, firstname) VALUES ($1,$2,$3,$4)', [email, hash, name, firstname])
-  res.status(400).json({ message: 'L utilisateur est maintenant inscrit!' })
   return
- 
+
 })
 
 
@@ -52,6 +55,13 @@ router.post('/register2', async(req, res) => {
   const password = req.body.password
   const name = req.body.name
   const firstname = req.body.firstname
+  
+  const nom_assoc = req.body.nom_assoc
+  const description = req.body.description
+  const members = req.body.members
+  const categorie = req.body.categorie
+  const mobile= req.body.mobile
+  const picture = req.body.picture
 
 
   const result = await client.query({ 
@@ -65,11 +75,23 @@ router.post('/register2', async(req, res) => {
   }
 
   const hash = await bcrypt.hash(password, 10)
-  await client.query('INSERT INTO gerants(email, password, name, firstname) VALUES ($1,$2,$3,$4)', [email, hash, name, firstname])
-  res.status(400).json({ message: 'L utilisateur est maintenant inscrit!' })
-  return
+  await client.query('INSERT INTO gerants(email, password, name, firstname) VALUES ($1,$2,$3,$4) ', [email, hash, name, firstname])
+  const test = await client.query('INSERT INTO associations(name,description,number,categorie,phone,picture) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *', [nom_assoc,description, members, categorie,mobile,picture])
+
+  res.json(test)
  
 })
+
+router.get('/backup', async(req, res) => {
+  var teste = await client.query('SELECT * FROM associations')
+  res.json(teste)
+})
+
+router.get('/backup2', async(req, res) => {
+  var teste = await client.query('SELECT name,firstname,email FROM gerants')
+  res.json(teste)
+})
+
 
 router.use((req, res, next) => {
   if(typeof req.session.follow === 'undefined') {
@@ -126,6 +148,96 @@ router.delete('/follow/:associationId', (req, res) => {
     }
     res.status(400).json({ message: 'bad request - Vous ne suivez pas cette association'})
 
+})
+
+router.post('/login_utilisateur', async(req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+
+  if( typeof email !== 'string' || email === '' ||
+      typeof password !== 'string' || password === '')
+  {
+    res.status(400).json({ message: 'bad request' })
+    return
+  }
+  else
+  {
+    const result = await client.query({text: 'SELECT * FROM utilisateurs WHERE email=$1', values: [email]})
+
+    if(result.rows.length === 0)
+    {
+      res.status(401).json({message: 'Cette utilisateur n\'existe pas ! '})
+    }
+  
+    user = result.rows[0]
+
+    if(await bcrypt.compare(password, user.password))
+    {
+      req.session.userId = user.id
+      res.json(user)
+    }
+    else
+    {
+      res.status(401).json({message: 'Le mot de passe est incorrect'})
+    }
+  }
+
+})
+
+/**
+ * Cette route permet au gérant de se connecter
+ */
+router.post('/login_gerant', async(req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+
+  if( typeof email !== 'string' || email === '' ||
+      typeof password !== 'string' || password === '')
+  {
+    res.status(400).json({ message: 'bad request' })
+    return
+  }
+  else
+  {
+    const result = await client.query({text: 'SELECT * FROM gerants WHERE email=$1', values: [email]})
+
+    if(result.rows.length === 0)
+    {
+      res.status(401).json({message: 'Cette utilisateur n\'existe pas ! '})
+    }
+  
+    user = result.rows[0]
+
+    if(await bcrypt.compare(password, user.password))
+    {
+      req.session.userId = user.id
+      res.json(user)
+    }
+    else
+    {
+      res.status(401).json({message: 'Le mot de passe est incorrect'})
+    }
+  }
+
+})
+
+
+router.get('/categories', (req, res) => {
+  res.json(categories)
+})
+
+router.post('/categories/:catId/:assosId', (req,res) => {
+  const catIndex = req.body.catIndex
+  const assosIndex = req.body.assosIndex
+
+  if (categories[catIndex].assos[assosIndex].followstatus == false){
+      categories[catIndex].assos[assosIndex].followstatus = true
+  }
+  else{
+      categories[catIndex].assos[assosIndex].followstatus = false
+  }
+
+  res.json(categories[catIndex].assos[assosIndex].followstatus)
 })
 
 

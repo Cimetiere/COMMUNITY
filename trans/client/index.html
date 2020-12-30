@@ -22,19 +22,80 @@
             <nav class="navbar navbar-dark bg-dark" id="navbar">
               
               <router-link  id="router" class="text-white" to='/inscription'><button type="button" class="btn btn-outline-info btn-lg" >Inscription</button></router-link>
-                          <router-link  id="router" class="text-white" to='/'><button type="button" class="btn btn-outline-light btn-lg">Accueil</button></router-link>
-                          <router-link  id="router" class="text-white" to='/'><button type="button" class="btn btn-outline-light btn-xl">Trouver des associations</button></router-link>
-                          <router-link  id="router" class="text-white" to='/monEspace'><button type="button" class="btn btn-outline-warning btn-lg">Mon espace</button></router-link>
+                         
+              <router-link  id="router" class="text-white" to='/categories'><button type="button" class="btn btn-outline-light btn-xl">Trouver des associations</button></router-link>
+              
+              
+
+           
+  
+                    
+     
+             
+
+              <router-link  id="router" class="text-white" to='/connexion'><button type="button" class="btn btn-outline-warning btn-lg">Mon espace</button></router-link>
+            
+              
             </nav>
+            <div id="annuler"> 
+
+            
+            <div class="btn-group-vertical " >
+              <div class="input-group mb-3 ">
+                
+                  <select id="select" v-model="choixVille" class="custom-select btn-sm " id="inputGroupSelect03">
+                    <option selected value="">Choisissez votre ville  </option>
+                    <option v-for="i in villes">{{i}}</option>
+                  </select>
+                  <div class="input-group-append ">
+                    <button   class="btn btn-outline-secondary " @click="AnnulVille()">Annuler</button>
+                    
+                  </div>
+                </div>
+                
+                </div>
+              </div>
           </header>
           <main>
+            
             <router-view
+            :choix-ville="choixVille"
+            :categories="categories"
+            :cat-id="catId"
+            :cat-index="catIndex"
+            :assos-id="assosId"
+            :assos-index="assosIndex"
+            :alertfollowing="alertfollowing"
+            @go-to-assos = "goToAssos"
+            @go-to-details = "goToDetails"
+            @go-to-details2 = "goToDetails2"
+            @follow-assos = "followAssos"
+            
+
             :associations="associations"
               :follow="follow"
+              :namee="namee"
+              :img="img"
+              :descriptionn= "descriptionn"
+              :numberr="numberr"
+              :categoriee="categoriee"
+              :phonee="phonee"
+              :taille="taille"
+              :i="i"
               @add-follow="addFollow"
               @un-follow="unfollow"
               @inscription="inscription"
               @inscription2="inscription2"
+              @backup="backup"
+             
+              :nomm="nomm"
+              :prenomm="prenomm"
+              :emaill="emaill"
+
+              :error="error"
+              
+              @connexion-utilisateur="connexionUtilisateur"
+              @connexion-gerant="connexionGerant"
             ></router-view>
           </main>
         </div>
@@ -43,6 +104,22 @@
 </html>
 
 
+<script>
+  module = {
+    props : {
+      villes: {type: Array, default: []}
+    },
+    data(){
+      return{
+        choixVille: ''
+      }
+    }
+
+
+  }
+ 
+  
+  </script>
 <style>
   #router{
 
@@ -55,7 +132,10 @@
   }
 
   #navbar{
-    padding: 30px;
+    padding-bottom: 58px;
+    padding-top: 30px;
+    padding-right: 10%;
+    padding-left: 10%;
   }
 
   .btn-xl{
@@ -67,6 +147,13 @@
 
   .btn-lg{
     font-weight: normal;
+  }
+
+  #annuler{
+    position: absolute;
+    top:15%;
+    left: 549px;
+  
   }
 
 </style>

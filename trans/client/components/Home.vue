@@ -26,6 +26,7 @@
 
         <div id="center">
             <h2>Qu'est-ce que COMMUNITY ?</h2>
+            </br>
             <p>Comment faciliter le développement de tout type d’associations ? 
                 <br>
                 Comment faire découvrir des secteurs insolites aux utilisateurs ? 
